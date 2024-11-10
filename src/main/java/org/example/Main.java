@@ -22,36 +22,42 @@ public class Main {
 
         System.out.println("Welcome to Twitter!");
         while (true) {
-            System.out.println("1. Signup");
-            System.out.println("2. Login");
+            System.out.println("1. Signup 🟢");
+            System.out.println("2. Login 🔵");
             System.out.println("Choose You Action: ");
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    System.out.println("Please Enter Your Username:");
+                    System.out.println("Please Enter Your Username 📜:");
                     String username = scanner.next();
-                    System.out.println("Please Enter Your Password:");
+                    System.out.println("Please Enter Your Password 🔑:");
                     String password = scanner.next();
-                    System.out.println("Please Enter Your Display Name:");
+                    System.out.println("Please Enter Your Display Name 📑:");
                     String displayName = scanner.next();
-                    System.out.println("Please Enter Your Email:");
+                    System.out.println("Please Enter Your Email 📩:");
                     String email = scanner.next();
-                    System.out.println("Please Enter Your Bio:");
+                    System.out.println("Please Enter Your Bio 📋:");
                     String bio = scanner.next();
                     userServices.userSignUp(username, password, displayName, email, bio);
-                    System.out.println("Your Account has been created!");
+                    System.out.println("Your Account has been created!✅");
                     break;
 
                 case "2":
-                    System.out.println("Please Enter Your Username or Email: ");
+                    System.out.println("Please Enter Your Username or Email 📩: ");
                     String usernameOrEmail = scanner.next();
-                    System.out.println("Please Enter Your Password: ");
+                    System.out.println("Please Enter Your Password 🔑: ");
                     String LoggingPassword = scanner.next();
-                    userServices.userLogin(usernameOrEmail, LoggingPassword);
+                    if(userServices.userLogin(usernameOrEmail, LoggingPassword)) {
+                        userMenu();
+                    }
                     break;
             }
         }
+    }
+
+    private static void userMenu() {
+        System.out.println("Welcome Dear User😍");
     }
 }
 

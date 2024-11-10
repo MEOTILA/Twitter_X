@@ -18,7 +18,7 @@ public class UserServices {
         var checkingUser = userRepository.findByUsername(username);
 
         if (checkingUser != null) {
-            System.out.println("Username is already taken!");
+            System.out.println("Username is already taken ❗");
             return null;
         }
         User signingUpUser = new User();
@@ -38,11 +38,11 @@ public class UserServices {
         if (checkingUserByUsername != null) {
             if (checkingUserByUsername.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(checkingUserByUsername);
-                System.out.println("Welcome to Tweeter!");
+                System.out.println("Welcome to Tweeter! 😋");
                 return true;
             }
         }
-        System.out.println("Wrong username or password!");
+        System.out.println("Wrong username or password ❗");
         return false;
     }
 }
