@@ -102,6 +102,7 @@ public class Main {
                         break;
                 case "3":
                     System.out.println("* Update a Tweet *");
+                    //todo: tweetServices.showUserTweets();
                     System.out.println("** Enter Tweet ID to Update: ");
                     int tweetIdToUpdate = scanner.nextInt();
                     System.out.println("** Enter Updated Tweet Text: ");
@@ -131,7 +132,7 @@ public class Main {
 
     }
 
-    private static void userSetting(UserServices userServices) {
+    private static void userSetting(UserServices userServices) throws SQLException {
         while (true) {
             System.out.println("* Settings *");
             System.out.println("1. Change Username");
@@ -145,22 +146,36 @@ public class Main {
 
             switch (option) {
                 case "1":
+                    System.out.println("* Change Username *");
+                    System.out.println("Enter Your New Username: ");
+                    String newUserName = scanner.next();
+                    userServices.updateUsername(newUserName);
 
                     break;
 
                 case "2":
+                    System.out.println("* Change Password *");
+                    System.out.println("Enter Your New Password: ");
+                    String newPassword = scanner.next();
+                    userServices.updatePassword(newPassword);
                     break;
 
                 case "3":
+                    System.out.println("* Change Display Name *");
+                    System.out.println("Enter Your New Display Name: ");
+                    String newDisplayName = scanner.next();
+                    userServices.updateDisplayName(newDisplayName);
                     break;
 
                 case "4":
+                    System.out.println("* Change Bio *");
+                    System.out.println("Enter Your new Bio: ");
+                    String newBio = scanner.next();
+                    userServices.updateBio(newBio);
                     break;
 
                 case "5":
-
                     return;
-
             }
         }
     }
