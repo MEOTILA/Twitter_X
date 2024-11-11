@@ -57,7 +57,8 @@ public class TweetRepository {
     private static final String UPDATE_TWEET_TEXT = """
             UPDATE TWEETS
             SET tweet_text = ?
-            WHERE tweet_id = ?;
+            WHERE tweet_id = ?
+            AND user_id = ?;
             """;
     private static final String UPDATE_TWEET_LIKE_COUNT = """
             UPDATE TWEETS
@@ -73,6 +74,11 @@ public class TweetRepository {
             UPDATE TWEETS
             SET retweet_count = ?
             WHERE tweet_id = ?;
+            """;
+    private static final String DELETE_TWEET_WITH_USER_ID_AND_TWEET_ID = """
+            DELETE FROM TWEETS
+            WHERE tweet_id = ?
+            AND user_id = ?
             """;
 
     public Tweet saveTweet(Tweet tweet) throws SQLException {
@@ -90,20 +96,32 @@ public class TweetRepository {
         return tweet;
     }
 
-    public Tweet updateTweet(Tweet tweet) throws SQLException{
+    public Tweet updateTweet(Tweet tweet) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
         var statement = Datasource.getConnection().prepareStatement(UPDATE_TWEET_TEXT);
-        statement.setString(1,tweet.getTweetText());
+        statement.setString(1, tweet.getTweetText());
+        statement.setInt(2, tweet.getTweetID());
+        statement.setInt(3, userId);
         statement.execute();
         statement.close();
 
         return tweet;
     }
 
-    public void deleteTweet(int tweetId) throws SQLException{
-        var statement = Datasource.getConnection().prepareStatement(DELETE_BY_TWEET_ID);
+    public int deleteTweet(int tweetId) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(DELETE_TWEET_WITH_USER_ID_AND_TWEET_ID);
         statement.setInt(1, tweetId);
-        statement.execute();
-        statement.close();
+        statement.setInt(2, userId);
+        int rowsAffected = statement.executeUpdate();
+
+        if (rowsAffected == 0) {
+            return -1;
+        } else {
+            return 1;
+        }
     }
 
     public Tweet retweet(Tweet tweet) throws SQLException{
@@ -127,6 +145,23 @@ public class TweetRepository {
             tweets.add(tweet);
         }
 
+        statement.close();
+        return tweets;
+    }
+    public List<Tweet> showUserTweets() throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+        var statement = Datasource.getConnection().prepareStatement(FIND_BY_USER_ID);
+        statement.setInt(1, userId);
+        ResultSet resultSet = statement.executeQuery();
+
+        List<Tweet> tweets = new ArrayList<>();
+        while (resultSet.next()) {
+            Tweet tweet = new Tweet();
+            tweet.setTweetID(resultSet.getInt("tweet_id"));
+            tweet.setTweetText(resultSet.getString("tweet_text"));
+
+            tweets.add(tweet);
+        }
         statement.close();
         return tweets;
     }
