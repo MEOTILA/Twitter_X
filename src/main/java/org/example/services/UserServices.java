@@ -38,7 +38,6 @@ public class UserServices {
         if (checkingUserByUsername != null) {
             if (checkingUserByUsername.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(checkingUserByUsername);
-                System.out.println("Welcome to Tweeter! 😋");
                 return true;
             }
         }
