@@ -2,6 +2,7 @@ package org.example.repository;
 
 import org.example.Datasource;
 import org.example.entity.User;
+import org.example.services.AuthenticationServices;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,6 +58,26 @@ public class UserRepository {
     private static final String UPDATE_USER = """
             UPDATE USERS
             SET username = ? , password = crypt(?, gen_salt('bf')) , display_name = ? , bio = ?
+            WHERE user_id = ?;
+            """;
+    private static final String UPDATE_USERNAME = """
+            UPDATE USERS
+            SET username = ?
+            WHERE user_id = ?;
+            """;
+    private static final String UPDATE_PASSWORD = """
+            UPDATE USERS
+            SET password = crypt(?, gen_salt('bf'))
+            WHERE user_id = ?;
+            """;
+    private static final String UPDATE_DISPLAY_NAME = """
+            UPDATE USERS
+            SET display_name = ?
+            WHERE user_id = ?;
+            """;
+    private static final String UPDATE_BIO = """
+            UPDATE USERS
+            SET bio = ?
             WHERE user_id = ?;
             """;
 
@@ -157,6 +178,53 @@ public class UserRepository {
         statement.setString(2, user.getPassword());
         statement.setString(3,user.getDisplayName());
         statement.setString(4,user.getBio());
+
+        statement.execute();
+        statement.close();
+        return user;
+    }
+    public User updateUsername(User user) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_USERNAME);
+        statement.setString(1, user.getUsername());
+        statement.setInt(2, userId);
+
+        statement.execute();
+        statement.close();
+        return user;
+    }
+
+    public User updatePassword(User user) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_PASSWORD);
+        statement.setString(1, user.getPassword());
+        statement.setInt(2, userId);
+
+        statement.execute();
+        statement.close();
+        return user;
+    }
+
+    public User updateDisplayName(User user) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_DISPLAY_NAME);
+        statement.setString(1, user.getDisplayName());
+        statement.setInt(2, userId);
+
+        statement.execute();
+        statement.close();
+        return user;
+    }
+
+    public User updateBio(User user) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_BIO);
+        statement.setString(1, user.getBio());
+        statement.setInt(2, userId);
 
         statement.execute();
         statement.close();

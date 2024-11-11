@@ -38,10 +38,37 @@ public class UserServices {
         if (checkingUserByUsername != null) {
             if (checkingUserByUsername.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(checkingUserByUsername);
+                System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername()+"🤩!");
                 return true;
             }
         }
         System.out.println("Wrong username or password ❗");
         return false;
+    }
+
+    public User updateUsername(String updatedUsername) throws SQLException {
+        User user = new User();
+        user.setUsername(updatedUsername);
+        System.out.println("Your Username has been updated!");
+        return userRepository.updateUsername(user);
+    }
+    public User updatePassword(String updatedPassword) throws SQLException {
+        User user = new User();
+        user.setPassword(updatedPassword);
+        System.out.println("Your Password has been updated!");
+        return userRepository.updatePassword(user);
+    }
+    public User updateDisplayName(String updatedDisplayName) throws SQLException {
+        User user = new User();
+        user.setDisplayName(updatedDisplayName);
+        System.out.println("Your Display Name has been updated!");
+        return userRepository.updateDisplayName(user);
+    }
+
+    public User updateBio(String updatedBio) throws SQLException {
+        User user = new User();
+        user.setBio(updatedBio);
+        System.out.println("Your Bio has been updated!");
+        return userRepository.updateBio(user);
     }
 }
