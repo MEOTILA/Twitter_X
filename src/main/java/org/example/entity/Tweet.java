@@ -1,8 +1,6 @@
 package org.example.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -10,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 public class Tweet {
     private int tweetID;
+    private int userID;
     private String tweetText;
     private int likeCount;
     private int dislikeCount;
