@@ -141,6 +141,9 @@ public class TweetRepository {
             tweet.setTweetID(resultSet.getInt("tweet_id"));
             tweet.setUserID(resultSet.getInt("user_id"));
             tweet.setTweetText(resultSet.getString("tweet_text"));
+            tweet.setLikeCount(resultSet.getInt("like_count"));
+            tweet.setDislikeCount(resultSet.getInt("dislike_count"));
+            tweet.setRetweetCount(resultSet.getInt("retweet_count"));
 
             tweets.add(tweet);
         }
@@ -148,17 +151,22 @@ public class TweetRepository {
         statement.close();
         return tweets;
     }
+
     public List<Tweet> showUserTweets() throws SQLException {
         int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
         var statement = Datasource.getConnection().prepareStatement(FIND_BY_USER_ID);
+        System.out.println("FIND_BY_USER_ID1");
         statement.setInt(1, userId);
         ResultSet resultSet = statement.executeQuery();
+        System.out.println("FIND_BY_USER_ID2");
 
         List<Tweet> tweets = new ArrayList<>();
         while (resultSet.next()) {
             Tweet tweet = new Tweet();
             tweet.setTweetID(resultSet.getInt("tweet_id"));
             tweet.setTweetText(resultSet.getString("tweet_text"));
+            tweet.setUserID(resultSet.getInt(userId));
 
             tweets.add(tweet);
         }

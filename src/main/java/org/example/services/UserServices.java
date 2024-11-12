@@ -10,9 +10,11 @@ public class UserServices {
     //Login
     //SignUp
     UserRepository userRepository;
+
     public UserServices() throws SQLException {
         userRepository = new UserRepository();
     }
+
     public User userSignUp(String username, String password, String displayName,
                            String email, String bio) throws SQLException {
         var checkingUser = userRepository.findByUsername(username);
@@ -38,7 +40,7 @@ public class UserServices {
         if (checkingUserByUsername != null) {
             if (checkingUserByUsername.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(checkingUserByUsername);
-                System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername()+"🤩!");
+                System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername() + "🤩!");
                 return true;
             }
         }
@@ -52,12 +54,14 @@ public class UserServices {
         System.out.println("Your Username has been updated!");
         return userRepository.updateUsername(user);
     }
+
     public User updatePassword(String updatedPassword) throws SQLException {
         User user = new User();
         user.setPassword(updatedPassword);
         System.out.println("Your Password has been updated!");
         return userRepository.updatePassword(user);
     }
+
     public User updateDisplayName(String updatedDisplayName) throws SQLException {
         User user = new User();
         user.setDisplayName(updatedDisplayName);
@@ -70,5 +74,21 @@ public class UserServices {
         user.setBio(updatedBio);
         System.out.println("Your Bio has been updated!");
         return userRepository.updateBio(user);
+    }
+
+    //    public void logout () {
+//        AuthenticationServices.logout();
+//        System.out.println("Good Bye Dear " +
+//                AuthenticationServices.getLoggedInUser().getDisplayName() + "👋🏻");
+//    }
+
+    public void logout() {
+        User user = AuthenticationServices.getLoggedInUser();
+        if (user != null) {
+            System.out.println("Good Bye Dear " + user.getDisplayName() + "👋🏻");
+            AuthenticationServices.logout();
+        } else {
+            System.out.println("Error!");
+        }
     }
 }

@@ -38,8 +38,22 @@ public class TweetServices {
         }
     }
 
-    public List<Tweet> showAllTweets() throws SQLException {
+    /*public List<Tweet> showAllTweets() throws SQLException {
         return tweetRepository.showAllTweets();
+    }*/
+
+    public void showAllTweets() throws SQLException {
+        List<Tweet> allTweets = tweetRepository.showAllTweets();
+
+        for (Tweet tweet : allTweets) {
+            System.out.println("** Tweet Text 📝: " + tweet.getTweetText());
+            System.out.println("** User ID 👨🏻‍⚖️: " + tweet.getUserID());
+            System.out.print("** Tweet ID 🌐: " + tweet.getTweetID());
+            System.out.print(" * Like: " + tweet.getLikeCount() + "💖");
+            System.out.print(" * Dislike:" + tweet.getDislikeCount() + "👎🏻");
+            System.out.print(" * Retweet: " + tweet.getRetweetCount() + "🔁");
+            System.out.println("\n---------------------------------------------");
+        }
     }
 
     public List<Tweet> showUserTweets() throws SQLException {
