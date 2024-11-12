@@ -157,10 +157,8 @@ public class TweetRepository {
         int userId = AuthenticationServices.getLoggedInUser().getUserId();
 
         var statement = Datasource.getConnection().prepareStatement(FIND_BY_USER_ID);
-        System.out.println("FIND_BY_USER_ID1");
         statement.setInt(1, userId);
         ResultSet resultSet = statement.executeQuery();
-        System.out.println("FIND_BY_USER_ID2");
 
         List<Tweet> tweets = new ArrayList<>();
         while (resultSet.next()) {

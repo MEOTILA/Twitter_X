@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.entity.Tweet;
+import org.example.entity.User;
 import org.example.repository.TweetRepository;
 import org.example.repository.UserRepository;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class TweetServices {
 
     TweetRepository tweetRepository;
+    UserRepository userRepository = new UserRepository();
 
     public TweetServices() throws SQLException {
         tweetRepository = new TweetRepository();
@@ -44,7 +46,7 @@ public class TweetServices {
 
     public void showAllTweets() throws SQLException {
         List<Tweet> allTweets = tweetRepository.showAllTweets();
-
+        //List<User> allDisplayName = userRepository.
         for (Tweet tweet : allTweets) {
             System.out.println("** Tweet Text 📝: " + tweet.getTweetText());
             System.out.println("** User ID 👨🏻‍⚖️: " + tweet.getUserID());
@@ -52,7 +54,7 @@ public class TweetServices {
             System.out.print(" * Like: " + tweet.getLikeCount() + "💖");
             System.out.print(" * Dislike:" + tweet.getDislikeCount() + "👎🏻");
             System.out.print(" * Retweet: " + tweet.getRetweetCount() + "🔁");
-            System.out.println("\n---------------------------------------------");
+            System.out.println("\n------------------------------------------------------------");
         }
     }
 

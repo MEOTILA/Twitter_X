@@ -50,6 +50,10 @@ public class UserRepository {
             SELECT * FROM USERS
             WHERE username = ?
             """;
+    private static final String FIND_BY_DISPLAY_NAME = """
+            SELECT * FROM USERS
+            WHERE display_name = ?
+            """;
     private static final String FIND_BY_EMAIL = """
             SELECT * FROM USERS
             WHERE email = ?
