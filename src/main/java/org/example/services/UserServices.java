@@ -34,13 +34,16 @@ public class UserServices {
     }
 
     public boolean userLogin(String usernameOrEmail, String password) throws SQLException {
-        var checkingUserByUsername = userRepository.findByUsername(usernameOrEmail);
-        //var checkingUserByEmail = userRepository.findByEmail(usernameOrEmail);
+        User user = userRepository.findByUsername(usernameOrEmail);
+        if (user == null) {
+            user = userRepository.findByEmail(usernameOrEmail);
+        }
 
-        if (checkingUserByUsername != null) {
-            if (checkingUserByUsername.getPassword().equals(password)) {
-                AuthenticationServices.setLoggedUser(checkingUserByUsername);
-                System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername() + "🤩!");
+        if (user != null)
+        {
+            if (user.getPassword().equals(password)) {
+                AuthenticationServices.setLoggedUser(user);
+                System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername() + "😍");
                 return true;
             }
         }
