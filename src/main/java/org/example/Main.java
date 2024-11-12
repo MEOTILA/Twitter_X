@@ -60,13 +60,14 @@ public class Main {
 
     private static void userMenu(UserServices userServices, TweetServices tweetServices) throws SQLException {
         while (true){
-        System.out.println("* User Menu *");
-        System.out.println("1. Explore all Tweets");
-        System.out.println("2. Post a Tweet");
-        System.out.println("3. Update a Tweet");
-        System.out.println("4. Delete a Tweet");
-        System.out.println("5. Setting");
-        System.out.println("6. Logout");
+        System.out.println("* User Menu 📋*");
+        System.out.println("1. Explore all Tweets 🌐");
+        System.out.println("2. Explore Your Tweets 📨️️️");
+        System.out.println("3. Post a Tweet 💌");
+        System.out.println("4. Update a Tweet 🔄");
+        System.out.println("5. Delete a Tweet ❌");
+        System.out.println("6. Setting 💻");
+        System.out.println("7. Logout 👋🏻");
         System.out.println("Choose Your Action: ");
 
         String option = scanner.next();
@@ -74,7 +75,7 @@ public class Main {
 
             switch (option) {
                 case "1":
-                    System.out.println("* Explore Tweets *");
+                    /*System.out.println("* Explore Tweets *");
                     List<Tweet> allTweets = tweetServices.showAllTweets();
                     for (Tweet tweet : allTweets) {
                         System.out.println("** Tweet Text: " + tweet.getTweetText());
@@ -82,12 +83,22 @@ public class Main {
                         System.out.println("** Tweet ID: " + tweet.getTweetID());
                         System.out.println("-------");
                     }
-                    userMenu(userServices, tweetServices);
+                    userMenu(userServices, tweetServices);*/
+                    System.out.println("All Tweets! 🌐");
+                    tweetServices.showAllTweets();
+                    System.out.println("Choose Tweet ID to Like, Dislike or Retweet: ");
+                    int tweetID = scanner.nextInt();
                     break;
 
                 case "2":
+                    System.out.println("Your Tweets 📨️");
+                    //todo fix this method
+                    tweetServices.showUserTweets();
+                    break;
+
+                case "3":
                     while (true) {
-                        System.out.println("* New Tweet *");
+                        System.out.println("* New Tweet 💌*");
                         System.out.println("Write your Tweet: ");
                         String tweetText = scanner.next();
                         tweetServices.postTweet(tweetText);
@@ -95,13 +106,12 @@ public class Main {
                         System.out.println("Do you want to post another tweet (y/n)?");
                         String postAnotherTweet = scanner.next();
                         if (postAnotherTweet.equalsIgnoreCase("n")) {
-                            //userMenu(userServices, tweetServices);
                             break;
                         }
                     }
                         break;
-                case "3":
-                    System.out.println("* Update a Tweet *");
+                case "4":
+                    System.out.println("* Update a Tweet 🔄 *");
                     //todo: tweetServices.showUserTweets();
                     System.out.println("** Enter Tweet ID to Update: ");
                     int tweetIdToUpdate = scanner.nextInt();
@@ -110,8 +120,8 @@ public class Main {
                     tweetServices.updateTweet(tweetIdToUpdate, updatedTweetText);
                     break;
 
-                case "4":
-                    System.out.println("* Delete a Tweet *");
+                case "5":
+                    System.out.println("* Delete a Tweet ❌ *");
                     System.out.println("Enter Your Tweet ID to Delete: ");
                     tweetServices.showUserTweets();
                     int tweetIdToDelete = scanner.nextInt();
@@ -120,12 +130,11 @@ public class Main {
                     tweetServices.deleteTweet(tweetIdToDelete);
                     break;
 
-                case "5":
+                case "6":
                     userSetting(userServices);
                     break;
-                case "6":
-                    AuthenticationServices.logout();
-                    System.out.println("You have been Logged out successfully.");
+                case "7":
+                    userServices.logout();
                     return;
             }
         }
@@ -134,19 +143,19 @@ public class Main {
 
     private static void userSetting(UserServices userServices) throws SQLException {
         while (true) {
-            System.out.println("* Settings *");
-            System.out.println("1. Change Username");
-            System.out.println("2. Change Password");
-            System.out.println("3. Change Display Name");
-            System.out.println("4. Change Bio");
-            System.out.println("5. Back");
+            System.out.println("* Settings 💻 *");
+            System.out.println("1. Change Username 📑");
+            System.out.println("2. Change Password 🔑");
+            System.out.println("3. Change Display Name 👨🏻‍💼");
+            System.out.println("4. Change Bio 📃");
+            System.out.println("5. Back ⏪");
             System.out.println("Choose Your Action: ");
             String option = scanner.next();
 
 
             switch (option) {
                 case "1":
-                    System.out.println("* Change Username *");
+                    System.out.println("* Change Username 📑 *");
                     System.out.println("Enter Your New Username: ");
                     String newUserName = scanner.next();
                     userServices.updateUsername(newUserName);
@@ -154,21 +163,21 @@ public class Main {
                     break;
 
                 case "2":
-                    System.out.println("* Change Password *");
+                    System.out.println("* Change Password 🔑 *");
                     System.out.println("Enter Your New Password: ");
                     String newPassword = scanner.next();
                     userServices.updatePassword(newPassword);
                     break;
 
                 case "3":
-                    System.out.println("* Change Display Name *");
+                    System.out.println("* Change Display Name 👨🏻‍💼 *");
                     System.out.println("Enter Your New Display Name: ");
                     String newDisplayName = scanner.next();
                     userServices.updateDisplayName(newDisplayName);
                     break;
 
                 case "4":
-                    System.out.println("* Change Bio *");
+                    System.out.println("* Change Bio 📃 *");
                     System.out.println("Enter Your new Bio: ");
                     String newBio = scanner.next();
                     userServices.updateBio(newBio);
