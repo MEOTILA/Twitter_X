@@ -60,4 +60,25 @@ public class TweetServices {
         return tweetRepository.showUserTweets();
     }
 
+    public Tweet likeTweetById(int tweetId) throws SQLException {
+        Tweet tweet = new Tweet();
+        tweet.setTweetID(tweetId);
+        tweet.setLikeCount(tweet.getLikeCount() + 1);
+        tweetRepository.likeTweet(tweet);
+        return tweet;
+    }
+    public Tweet dislikeTweetById(int tweetId) throws SQLException {
+        Tweet tweet = new Tweet();
+        tweet.setTweetID(tweetId);
+        tweet.setDislikeCount(tweet.getDislikeCount() + 1);
+        tweetRepository.dislikeTweet(tweet);
+        return tweet;
+    }
+    public Tweet retweetTweetById(int tweetId) throws SQLException {
+        Tweet tweet = new Tweet();
+        tweet.setTweetID(tweetId);
+        tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+        tweetRepository.retweetTweet(tweet);
+        return tweet;
+    }
 }

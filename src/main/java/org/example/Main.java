@@ -1,12 +1,8 @@
 package org.example;
 
-import org.example.entity.Tweet;
-import org.example.entity.User;
-import org.example.services.AuthenticationServices;
 import org.example.services.TweetServices;
 import org.example.services.UserServices;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -19,16 +15,16 @@ public class Main {
         TweetServices tweetServices = new TweetServices();
 
 
-        System.out.println("* Welcome to Twitter! *");
+        System.out.println("* Welcome to Twitter!📱 *");
         while (true) {
-            System.out.println("1. Signup 🟢");
-            System.out.println("2. Login 🔵");
+            System.out.println("1. Signup ✅");
+            System.out.println("2. Login 🔰");
             System.out.println("Choose You Action: ");
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    System.out.println("* Signup *");
+                    System.out.println("* Signup ✅ *");
                     System.out.println("Please Enter Your Username 📜:");
                     String username = scanner.next();
                     System.out.println("Please Enter Your Password 🔑:");
@@ -44,7 +40,7 @@ public class Main {
                     break;
 
                 case "2":
-                    System.out.println("* Login *");
+                    System.out.println("* Login 🔰 *");
                     System.out.println("Please Enter Your Username or Email 📩: ");
                     String usernameOrEmail = scanner.next();
                     System.out.println("Please Enter Your Password 🔑: ");
@@ -60,7 +56,7 @@ public class Main {
 
     private static void userMenu(UserServices userServices, TweetServices tweetServices) throws SQLException {
         while (true){
-        System.out.println("* User Menu 📋*");
+        System.out.println("* User Menu 📋 *");
         System.out.println("1. Explore all Tweets 🌐");
         System.out.println("2. Explore Your Tweets 📨️️️");
         System.out.println("3. Post a Tweet 💌");
@@ -75,30 +71,41 @@ public class Main {
 
             switch (option) {
                 case "1":
-                    /*System.out.println("* Explore Tweets *");
-                    List<Tweet> allTweets = tweetServices.showAllTweets();
-                    for (Tweet tweet : allTweets) {
-                        System.out.println("** Tweet Text: " + tweet.getTweetText());
-                        System.out.println("** User ID: " + tweet.getUserID());
-                        System.out.println("** Tweet ID: " + tweet.getTweetID());
-                        System.out.println("-------");
+                    while (true) {
+                        System.out.println("* Explore Tweets! 🌐 *");
+                        tweetServices.showAllTweets();
+                        System.out.println("Choose your Action: \n1. Like💖 \n2. Dislike👎🏻 \n3. Retweet🔁 \n4. Back⏪");
+                        String operationChoose = scanner.next();
+
+                        if (operationChoose.equalsIgnoreCase("1")) {
+                            System.out.println("Enter Tweet ID to Like: ");
+                            int tweetID = scanner.nextInt();
+                            tweetServices.likeTweetById(tweetID);
+                        }
+                        if (operationChoose.equalsIgnoreCase("2")) {
+                            System.out.println("Enter Tweet ID to Dislike: ");
+                            int tweetID = scanner.nextInt();
+                            tweetServices.dislikeTweetById(tweetID);
+                        }
+                        if (operationChoose.equalsIgnoreCase("3")) {
+                            System.out.println("Enter Tweet ID to Retweet: ");
+                            int tweetID = scanner.nextInt();
+                            tweetServices.retweetTweetById(tweetID);
+                        } else if (operationChoose.equalsIgnoreCase("4")) {
+                            break;
+                        }
+                        break;
                     }
-                    userMenu(userServices, tweetServices);*/
-                    System.out.println("All Tweets! 🌐");
-                    tweetServices.showAllTweets();
-                    System.out.println("Choose Tweet ID to Like, Dislike or Retweet: ");
-                    int tweetID = scanner.nextInt();
-                    break;
 
                 case "2":
-                    System.out.println("Your Tweets 📨️");
+                    System.out.println("* Your Tweets 📨️ *");
                     //todo fix this method
                     tweetServices.showUserTweets();
                     break;
 
                 case "3":
                     while (true) {
-                        System.out.println("* New Tweet 💌*");
+                        System.out.println("* New Tweet 💌 *");
                         System.out.println("Write your Tweet: ");
                         String tweetText = scanner.next();
                         tweetServices.postTweet(tweetText);

@@ -81,6 +81,7 @@ public class TweetRepository {
             AND user_id = ?
             """;
 
+
     public Tweet saveTweet(Tweet tweet) throws SQLException {
         int userId = AuthenticationServices.getLoggedInUser().getUserId();
 
@@ -173,4 +174,30 @@ public class TweetRepository {
         statement.close();
         return tweets;
     }
+
+    public Tweet likeTweet(Tweet tweet) throws SQLException {
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_TWEET_LIKE_COUNT);
+        statement.setInt(1, tweet.getLikeCount());
+        statement.setInt(2, tweet.getTweetID());
+        statement.execute();
+        statement.close();
+        return tweet;
+    }
+    public Tweet dislikeTweet(Tweet tweet) throws SQLException{
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_TWEET_DISLIKE_COUNT);
+        statement.setInt(1, tweet.getDislikeCount());
+        statement.setInt(2, tweet.getTweetID());
+        statement.execute();
+        statement.close();
+        return tweet;
+    }
+    public Tweet retweetTweet(Tweet tweet) throws SQLException{
+        var statement = Datasource.getConnection().prepareStatement(UPDATE_TWEET_RETWEET_COUNT);
+        statement.setInt(1, tweet.getRetweetCount());
+        statement.setInt(2, tweet.getTweetID());
+        statement.execute();
+        statement.close();
+        return tweet;
+    }
+
 }
