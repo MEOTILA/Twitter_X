@@ -36,8 +36,12 @@ public class Main {
                     String email = scanner.nextLine();
                     System.out.println("Please Enter Your Bio 📋:");
                     String bio = scanner.nextLine();
-                    userServices.userSignUp(username, password, displayName, email, bio);
-                    System.out.println("Your Account has been created!✅");
+                    try {
+                        userServices.userSignUp(username, password, displayName, email, bio);
+                        System.out.println("Your Account has been created!✅");
+                    }catch (TwitterExceptions e){
+                        System.out.println("Signup failed: " + e.getMessage());
+                    }
                     break;
 
                 case "2":

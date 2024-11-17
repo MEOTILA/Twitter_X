@@ -20,12 +20,13 @@ public class UserServices {
     }
 
     public User userSignUp(String username, String password, String displayName,
-                           String email, String bio) throws SQLException {
+                           String email, String bio) throws SQLException, TwitterExceptions {
         var checkingUser = userRepository.findByUsername(username);
 
         if (checkingUser != null) {
-            System.out.println("Username is already taken ❗");
-            return null;
+            //System.out.println("Username is already taken ❗");
+            throw new TwitterExceptions("Username is already taken ❗");
+            //return null;
         }
         User signingUpUser = new User();
         signingUpUser.setUsername(username);
