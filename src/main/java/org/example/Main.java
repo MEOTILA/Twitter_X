@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.exception.TwitterExceptions;
 import org.example.services.TweetServices;
 import org.example.services.UserServices;
 import java.sql.SQLException;
@@ -20,21 +21,21 @@ public class Main {
             System.out.println("1. Signup ✅");
             System.out.println("2. Login 🔰");
             System.out.println("Choose You Action: ");
-            String option = scanner.next();
+            String option = scanner.nextLine();
 
             switch (option) {
                 case "1":
                     System.out.println("* Signup ✅ *");
                     System.out.println("Please Enter Your Username 📜:");
-                    String username = scanner.next();
+                    String username = scanner.nextLine();
                     System.out.println("Please Enter Your Password 🔑:");
-                    String password = scanner.next();
+                    String password = scanner.nextLine();
                     System.out.println("Please Enter Your Display Name 📑:");
-                    String displayName = scanner.next();
+                    String displayName = scanner.nextLine();
                     System.out.println("Please Enter Your Email 📩:");
-                    String email = scanner.next();
+                    String email = scanner.nextLine();
                     System.out.println("Please Enter Your Bio 📋:");
-                    String bio = scanner.next();
+                    String bio = scanner.nextLine();
                     userServices.userSignUp(username, password, displayName, email, bio);
                     System.out.println("Your Account has been created!✅");
                     break;
@@ -42,13 +43,16 @@ public class Main {
                 case "2":
                     System.out.println("* Login 🔰 *");
                     System.out.println("Please Enter Your Username or Email 📩: ");
-                    String usernameOrEmail = scanner.next();
+                    String usernameOrEmail = scanner.nextLine();
                     System.out.println("Please Enter Your Password 🔑: ");
-                    String LoggingPassword = scanner.next();
-                    if (userServices.userLogin(usernameOrEmail, LoggingPassword)) {
-                        userMenu(userServices, tweetServices);
+                    String LoggingPassword = scanner.nextLine();
+                    try {
+                        if (userServices.userLogin(usernameOrEmail, LoggingPassword)) {
+                            userMenu(userServices, tweetServices);
+                        }
+                    } catch (TwitterExceptions e) {
+                        System.out.println("Login failed: " + e.getMessage());
                     }
-                    break;
             }
         }
     }
@@ -66,7 +70,7 @@ public class Main {
         System.out.println("7. Logout 👋🏻");
         System.out.println("Choose Your Action: ");
 
-        String option = scanner.next();
+        String option = scanner.nextLine();
 
 
             switch (option) {
@@ -75,7 +79,7 @@ public class Main {
                         System.out.println("* Explore Tweets! 🌐 *");
                         tweetServices.showAllTweets();
                         System.out.println("Choose your Action: \n1. Like💖 \n2. Dislike👎🏻 \n3. Retweet🔁 \n4. Back⏪");
-                        String operationChoose = scanner.next();
+                        String operationChoose = scanner.nextLine();
 
                         if (operationChoose.equalsIgnoreCase("1")) {
                             System.out.println("Enter Tweet ID to Like: ");
@@ -107,11 +111,11 @@ public class Main {
                     while (true) {
                         System.out.println("* New Tweet 💌 *");
                         System.out.println("Write your Tweet: ");
-                        String tweetText = scanner.next();
+                        String tweetText = scanner.nextLine();
                         tweetServices.postTweet(tweetText);
                         System.out.println("Your Tweet has been posted successfully!");
                         System.out.println("Do you want to post another tweet (y/n)?");
-                        String postAnotherTweet = scanner.next();
+                        String postAnotherTweet = scanner.nextLine();
                         if (postAnotherTweet.equalsIgnoreCase("n")) {
                             break;
                         }
@@ -157,14 +161,14 @@ public class Main {
             System.out.println("4. Change Bio 📃");
             System.out.println("5. Back ⏪");
             System.out.println("Choose Your Action: ");
-            String option = scanner.next();
+            String option = scanner.nextLine();
 
 
             switch (option) {
                 case "1":
                     System.out.println("* Change Username 📑 *");
                     System.out.println("Enter Your New Username: ");
-                    String newUserName = scanner.next();
+                    String newUserName = scanner.nextLine();
                     userServices.updateUsername(newUserName);
 
                     break;
@@ -172,21 +176,21 @@ public class Main {
                 case "2":
                     System.out.println("* Change Password 🔑 *");
                     System.out.println("Enter Your New Password: ");
-                    String newPassword = scanner.next();
+                    String newPassword = scanner.nextLine();
                     userServices.updatePassword(newPassword);
                     break;
 
                 case "3":
                     System.out.println("* Change Display Name 👨🏻‍💼 *");
                     System.out.println("Enter Your New Display Name: ");
-                    String newDisplayName = scanner.next();
+                    String newDisplayName = scanner.nextLine();
                     userServices.updateDisplayName(newDisplayName);
                     break;
 
                 case "4":
                     System.out.println("* Change Bio 📃 *");
                     System.out.println("Enter Your new Bio: ");
-                    String newBio = scanner.next();
+                    String newBio = scanner.nextLine();
                     userServices.updateBio(newBio);
                     break;
 

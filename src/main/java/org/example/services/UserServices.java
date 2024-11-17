@@ -1,7 +1,9 @@
 package org.example.services;
 
 import org.example.entity.User;
+import org.example.exception.TwitterExceptions;
 import org.example.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -10,9 +12,11 @@ public class UserServices {
     //Login
     //SignUp
     UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public UserServices() throws SQLException {
         userRepository = new UserRepository();
+        passwordEncoder = new BCryptPasswordEncoder();
     }
 
     public User userSignUp(String username, String password, String displayName,
@@ -33,22 +37,20 @@ public class UserServices {
         return userRepository.save(signingUpUser);
     }
 
-    public boolean userLogin(String usernameOrEmail, String password) throws SQLException {
+    public boolean userLogin(String usernameOrEmail, String password) throws SQLException, TwitterExceptions {
         User user = userRepository.findByUsername(usernameOrEmail);
         if (user == null) {
             user = userRepository.findByEmail(usernameOrEmail);
         }
 
-        if (user != null)
-        {
+        if (user != null) {
             if (user.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(user);
                 System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername() + "😍");
                 return true;
             }
         }
-        System.out.println("Wrong username or password ❗");
-        return false;
+        throw new TwitterExceptions("Wrong username or password ❗");
     }
 
     public User updateUsername(String updatedUsername) throws SQLException {
