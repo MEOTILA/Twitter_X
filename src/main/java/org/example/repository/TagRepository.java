@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.Datasource;
+import org.example.entity.Tag;
 
 import java.sql.SQLException;
 
@@ -22,6 +23,20 @@ public class TagRepository {
     public void initTable() throws SQLException {
         var statement = Datasource.getConnection().prepareStatement(TagRepository.CREATE_TABLE_TAGS);
         statement.execute();
+        statement.close();
+    }
+
+    private static final String INSERT_TAG = """
+            INSERT INTO TAGS(tag_name, tweet_id)
+            VALUES (?, ?)
+            """;
+
+
+    public void saveTag(String tagName, int tweetId) throws SQLException {
+        var statement = Datasource.getConnection().prepareStatement(INSERT_TAG);
+        statement.setString(1, tagName);
+        statement.setInt(2, tweetId);
+        statement.executeUpdate();
         statement.close();
     }
 }
