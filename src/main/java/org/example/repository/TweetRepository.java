@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class TweetRepository {
     private static final String CREATE_TABLE_TWEETS = """
             CREATE TABLE IF NOT EXISTS tweets (
@@ -44,6 +46,10 @@ public class TweetRepository {
     private static final String FIND_BY_TWEET_ID = """
             SELECT * FROM TWEETS
             WHERE tweet_id = ?
+            """;
+    private static final String FOUNDED_TWEET_ID = """
+            SELECT tweet_id FROM TWEETS
+            WHERE tweet_text = ?
             """;
     private static final String FIND_ALL_TWEETS = """
             SELECT * FROM TWEETS
@@ -82,7 +88,7 @@ public class TweetRepository {
             """;
 
 
-    public Tweet saveTweet(Tweet tweet) throws SQLException {
+/*    public Tweet saveTweet(Tweet tweet) throws SQLException {
         int userId = AuthenticationServices.getLoggedInUser().getUserId();
 
         var statement = Datasource.getConnection().prepareStatement(INSERT_SQL);
@@ -95,7 +101,24 @@ public class TweetRepository {
         statement.close();
 
         return tweet;
+    }*/
+
+        public Tweet saveTweet(Tweet tweet) throws SQLException {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        var statement = Datasource.getConnection().prepareStatement(INSERT_SQL);
+        statement.setInt(1, userId);
+        statement.setString(2, tweet.getTweetText());
+        statement.setInt(3, 0);
+        statement.setInt(4, 0);
+        statement.setInt(5, 0);
+        statement.executeUpdate();
+        statement.close();
+
+        return tweet;
     }
+
+
 
     public Tweet updateTweet(Tweet tweet) throws SQLException {
         int userId = AuthenticationServices.getLoggedInUser().getUserId();
@@ -164,8 +187,11 @@ public class TweetRepository {
         while (resultSet.next()) {
             Tweet tweet = new Tweet();
             tweet.setTweetID(resultSet.getInt("tweet_id"));
+            tweet.setUserID(resultSet.getInt("user_id"));
             tweet.setTweetText(resultSet.getString("tweet_text"));
-            tweet.setUserID(resultSet.getInt(userId));
+            tweet.setLikeCount(resultSet.getInt("like_count"));
+            tweet.setDislikeCount(resultSet.getInt("dislike_count"));
+            tweet.setRetweetCount(resultSet.getInt("retweet_count"));
 
             tweets.add(tweet);
         }
@@ -196,6 +222,18 @@ public class TweetRepository {
         statement.execute();
         statement.close();
         return tweet;
+    }
+
+    public int findTweetIdByText(String tweetText) throws SQLException {
+        var statement = Datasource.getConnection().prepareStatement(FOUNDED_TWEET_ID);
+        statement.setString(1, tweetText);
+        ResultSet resultSet = statement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getInt("tweet_id");
+        } else {
+            return -1;
+        }
     }
 
 }

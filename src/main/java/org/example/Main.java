@@ -4,6 +4,8 @@ import org.example.exception.TwitterExceptions;
 import org.example.services.TweetServices;
 import org.example.services.UserServices;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -62,7 +64,7 @@ public class Main {
     }
 
 
-    private static void userMenu(UserServices userServices, TweetServices tweetServices) throws SQLException {
+    private static void userMenu(UserServices userServices, TweetServices tweetServices) throws SQLException, TwitterExceptions {
         while (true){
         System.out.println("* User Menu 📋 *");
         System.out.println("1. Explore all Tweets 🌐");
@@ -75,6 +77,12 @@ public class Main {
         System.out.println("Choose Your Action: ");
 
         String option = scanner.nextLine();
+//            try {
+//                int num = Integer.parseInt(option);
+//                System.out.println("You entered an integer: " + num);
+//            } catch (TwitterExceptions e) {
+//                System.out.println("You did not enter an integer.");
+//            }
 
 
             switch (option) {
@@ -112,11 +120,26 @@ public class Main {
                     break;
 
                 case "3":
-                    while (true) {
+                    /*while (true) {
+//                        System.out.println("* New Tweet 💌 *");
+//                        System.out.println("Write your Tweet: ");
+//                        String tweetText = scanner.nextLine();
+//                        tweetServices.postTweet(tweetText);
+//                        System.out.println("Your Tweet has been posted successfully!");
+//                        System.out.println("Do you want to post another tweet (y/n)?");
+//                        String postAnotherTweet = scanner.nextLine();
+//                        if (postAnotherTweet.equalsIgnoreCase("n")) {
+//                            break;
+//                        }
                         System.out.println("* New Tweet 💌 *");
                         System.out.println("Write your Tweet: ");
                         String tweetText = scanner.nextLine();
-                        tweetServices.postTweet(tweetText);
+
+                        System.out.println("Enter tags separated by commas (e.g., java, python, spring): ");
+                        String tagsInput = scanner.nextLine();
+                        List<String> tags = Arrays.asList(tagsInput.split(","));
+
+                        tweetServices.postTweet(tweetText, tags);
                         System.out.println("Your Tweet has been posted successfully!");
                         System.out.println("Do you want to post another tweet (y/n)?");
                         String postAnotherTweet = scanner.nextLine();
@@ -124,10 +147,21 @@ public class Main {
                             break;
                         }
                     }
+                        break;*/
+                    System.out.println("* New Tweet *");
+                    System.out.println("Write your Tweet: ");
+                    String tweetText = scanner.next();
+                    System.out.println("Enter tags separated by commas (e.g., java, python): ");
+                    String tagsInput = scanner.next();
+                    List<String> tags = Arrays.asList(tagsInput.split(","));
+
+                    tweetServices.postTweet(tweetText, tags);
+                    System.out.println("Your Tweet has been posted successfully!");
                         break;
+
                 case "4":
                     System.out.println("* Update a Tweet 🔄 *");
-                    //todo: tweetServices.showUserTweets();
+                    tweetServices.showUserTweets();
                     System.out.println("** Enter Tweet ID to Update: ");
                     int tweetIdToUpdate = scanner.nextInt();
                     System.out.println("** Enter Updated Tweet Text: ");
@@ -137,10 +171,10 @@ public class Main {
 
                 case "5":
                     System.out.println("* Delete a Tweet ❌ *");
-                    System.out.println("Enter Your Tweet ID to Delete: ");
                     tweetServices.showUserTweets();
+                    System.out.println("Enter Your Tweet ID to Delete: ");
                     int tweetIdToDelete = scanner.nextInt();
-                    //todo: tweetServices.showUserTweets();
+                    tweetServices.showUserTweets();
 
                     tweetServices.deleteTweet(tweetIdToDelete);
                     break;

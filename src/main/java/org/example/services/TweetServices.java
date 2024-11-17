@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entity.Tweet;
 import org.example.entity.User;
+import org.example.repository.TagRepository;
 import org.example.repository.TweetRepository;
 import org.example.repository.UserRepository;
 
@@ -12,16 +13,29 @@ public class TweetServices {
 
     TweetRepository tweetRepository;
     UserRepository userRepository = new UserRepository();
-
+    TagServices tagServices = new TagServices();
     public TweetServices() throws SQLException {
         tweetRepository = new TweetRepository();
     }
 
-    public Tweet postTweet (String tweetText) throws SQLException {
+//    public Tweet postTweet (String tweetText) throws SQLException {
+//
+//        Tweet tweet = new Tweet();
+//        tweet.setTweetText(tweetText);
+//        return tweetRepository.saveTweet(tweet);
+//    }
 
+    public Tweet postTweet(String tweetText, List<String> tags) throws SQLException {
         Tweet tweet = new Tweet();
         tweet.setTweetText(tweetText);
-        return tweetRepository.saveTweet(tweet);
+
+        tweet = tweetRepository.saveTweet(tweet);
+
+        for (String tagName : tags) {
+            tagServices.saveTag(tagName, tweet.getTweetID());
+        }
+
+        return tweet;
     }
 
     public Tweet updateTweet(int tweetId, String updatedTweetText) throws SQLException {
@@ -58,17 +72,27 @@ public class TweetServices {
         }
     }
 
-    public List<Tweet> showUserTweets() throws SQLException {
-        return tweetRepository.showUserTweets();
+    public void showUserTweets() throws SQLException {
+        List<Tweet> userTweets = tweetRepository.showUserTweets();
+        for (Tweet tweet : userTweets) {
+            System.out.println("** Tweet Text 📝: " + tweet.getTweetText());
+            System.out.println("** User ID 👨🏻‍⚖️: " + tweet.getUserID());
+            System.out.print("** Tweet ID 🌐: " + tweet.getTweetID());
+            System.out.print(" * Like: " + tweet.getLikeCount() + "💖");
+            System.out.print(" * Dislike:" + tweet.getDislikeCount() + "👎🏻");
+            System.out.print(" * Retweet: " + tweet.getRetweetCount() + "🔁");
+            System.out.println("\n------------------------------------------------------------");
+        }
     }
 
     public Tweet likeTweetById(int tweetId) throws SQLException {
-        Tweet tweet = new Tweet();
+        Tweet tweet = new Tweet(); //fetch tweet
         tweet.setTweetID(tweetId);
         tweet.setLikeCount(tweet.getLikeCount() + 1);
         tweetRepository.likeTweet(tweet);
         return tweet;
     }
+
     public Tweet dislikeTweetById(int tweetId) throws SQLException {
         Tweet tweet = new Tweet();
         tweet.setTweetID(tweetId);
