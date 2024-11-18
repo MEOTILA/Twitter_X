@@ -45,7 +45,8 @@ public class UserServices {
         }
 
         if (user != null) {
-            if (user.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, user.getPassword())) {
+            //if (user.getPassword().equals(password)) {
                 AuthenticationServices.setLoggedUser(user);
                 System.out.println("Welcome Dear " + AuthenticationServices.getLoggedInUser().getUsername() + "😍");
                 return true;
