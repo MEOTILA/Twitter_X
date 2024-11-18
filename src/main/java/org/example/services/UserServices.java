@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class UserServices {
-    //Login
-    //SignUp
+
     UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 

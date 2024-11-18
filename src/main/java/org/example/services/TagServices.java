@@ -14,7 +14,7 @@ public class TagServices {
         tagRepository = new TagRepository();
     }
 
-    public void saveTag(String tagName, int tweetId) throws SQLException,TwitterExceptions {
+    public void saveTag(String tagName, int tweetId) throws SQLException {
         try {
             tagRepository.saveTag(tagName, tweetId);
 
@@ -22,7 +22,7 @@ public class TagServices {
             throw new SQLException (e.getMessage());
         }
         catch (TwitterExceptions b){
-            throw new TwitterExceptions("Error saving tag!");
+            throw new TwitterExceptions("Error saving tag!" + b.getMessage());
         }
     }
 }

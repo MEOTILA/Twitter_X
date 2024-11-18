@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.exception.TwitterExceptions;
+import org.example.services.TagServices;
 import org.example.services.TweetServices;
 import org.example.services.UserServices;
 import java.sql.SQLException;
@@ -16,6 +17,7 @@ public class Main {
 
         UserServices userServices = new UserServices();
         TweetServices tweetServices = new TweetServices();
+        TagServices tagServices = new TagServices();
 
 
         System.out.println("* Welcome to Twitter!📱 *");
@@ -54,7 +56,7 @@ public class Main {
                     String LoggingPassword = scanner.nextLine();
                     try {
                         if (userServices.userLogin(usernameOrEmail, LoggingPassword)) {
-                            userMenu(userServices, tweetServices);
+                            userMenu(userServices, tweetServices,tagServices);
                         }
                     } catch (TwitterExceptions e) {
                         System.out.println("Login failed: " + e.getMessage());
@@ -64,7 +66,8 @@ public class Main {
     }
 
 
-    private static void userMenu(UserServices userServices, TweetServices tweetServices) throws SQLException, TwitterExceptions {
+    private static void userMenu(UserServices userServices, TweetServices tweetServices,
+                                 TagServices tagServices) throws SQLException {
         while (true){
         System.out.println("* User Menu 📋 *");
         System.out.println("1. Explore all Tweets 🌐");
@@ -77,11 +80,13 @@ public class Main {
         System.out.println("Choose Your Action: ");
 
         String option = scanner.nextLine();
+//
 //            try {
 //                int num = Integer.parseInt(option);
 //                System.out.println("You entered an integer: " + num);
-//            } catch (TwitterExceptions e) {
-//                System.out.println("You did not enter an integer.");
+//            } catch (TwitterExceptions s) {
+//                System.out.println("You did not enter an integer." + s.getMessage());
+//                s.printStackTrace();
 //            }
 
 
@@ -91,7 +96,7 @@ public class Main {
                         System.out.println("* Explore Tweets! 🌐 *");
                         tweetServices.showAllTweets();
                         System.out.println("Choose your Action: \n1. Like💖 \n2. Dislike👎🏻 \n3. Retweet🔁 \n4. Back⏪");
-                        String operationChoose = scanner.nextLine();
+                            String operationChoose = scanner.nextLine();
 
                         if (operationChoose.equalsIgnoreCase("1")) {
                             System.out.println("Enter Tweet ID to Like: ");
@@ -115,7 +120,6 @@ public class Main {
 
                 case "2":
                     System.out.println("* Your Tweets 📨️ *");
-                    //todo fix this method
                     tweetServices.showUserTweets();
                     break;
 
@@ -150,13 +154,13 @@ public class Main {
                         break;*/
                     System.out.println("* New Tweet *");
                     System.out.println("Write your Tweet: ");
-                    String tweetText = scanner.next();
+                    String tweetText = scanner.nextLine();
                     System.out.println("Enter tags separated by commas (e.g., java, python): ");
-                    String tagsInput = scanner.next();
+                    String tagsInput = scanner.nextLine();
                     List<String> tags = Arrays.asList(tagsInput.split(","));
 
                     tweetServices.postTweet(tweetText, tags);
-                    System.out.println("Your Tweet has been posted successfully!");
+                    System.out.println("Your Tweet has been posted successfully ✅");
                         break;
 
                 case "4":
@@ -187,7 +191,6 @@ public class Main {
                     return;
             }
         }
-
     }
 
     private static void userSetting(UserServices userServices) throws SQLException {

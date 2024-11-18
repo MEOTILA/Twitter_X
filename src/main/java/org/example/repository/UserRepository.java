@@ -7,7 +7,7 @@ import org.example.services.AuthenticationServices;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
+
 
 public class UserRepository {
 
@@ -92,6 +92,7 @@ public class UserRepository {
         statement.setString(3, user.getDisplayName());
         statement.setString(4, user.getEmail());
         statement.setString(5, user.getBio());
+
         java.sql.Date sqlDate = java.sql.Date.valueOf(user.getAccountCreateDate());
         statement.setDate(6, sqlDate);
 

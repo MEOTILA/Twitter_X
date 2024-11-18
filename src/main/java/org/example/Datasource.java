@@ -15,7 +15,7 @@ public class Datasource {
     }
 
     static {
-        var jdbc = "jdbc:postgresql://localhost:5432/";
+        var jdbc = "jdbc:postgresql://localhost:5432/tweeter_x";
         try {
             connection = DriverManager.getConnection(jdbc,
                     "postgres", "postgres");

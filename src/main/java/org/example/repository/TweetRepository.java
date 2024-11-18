@@ -215,7 +215,7 @@ public class TweetRepository {
         statement.close();
         return tweet;
     }
-    public Tweet retweetTweet(Tweet tweet) throws SQLException{
+    public Tweet retweetTweetCount(Tweet tweet) throws SQLException{
         var statement = Datasource.getConnection().prepareStatement(UPDATE_TWEET_RETWEET_COUNT);
         statement.setInt(1, tweet.getRetweetCount());
         statement.setInt(2, tweet.getTweetID());
@@ -224,15 +224,70 @@ public class TweetRepository {
         return tweet;
     }
 
-    public int findTweetIdByText(String tweetText) throws SQLException {
-        var statement = Datasource.getConnection().prepareStatement(FOUNDED_TWEET_ID);
-        statement.setString(1, tweetText);
+    public Tweet retweetTweet(int tweetId, int userId) throws SQLException {
+        var statement = Datasource.getConnection().prepareStatement(FIND_BY_TWEET_ID);
+        statement.setInt(1, tweetId);
         ResultSet resultSet = statement.executeQuery();
 
-        if (resultSet.next()) {
-            return resultSet.getInt("tweet_id");
-        } else {
-            return -1;
+        if (!resultSet.next()) {
+            return null;
+        }
+
+        Tweet originalTweet = new Tweet();
+        originalTweet.setTweetID(resultSet.getInt("tweet_id"));
+        originalTweet.setUserID(resultSet.getInt("user_id"));
+        originalTweet.setTweetText(resultSet.getString("tweet_text"));
+        originalTweet.setLikeCount(resultSet.getInt("like_count"));
+        originalTweet.setDislikeCount(resultSet.getInt("dislike_count"));
+        originalTweet.setRetweetCount(resultSet.getInt("retweet_count"));
+
+        resultSet.close();
+        statement.close();
+
+
+        Tweet retweet = new Tweet();
+        //retweet.setTweetText("RT @" + originalTweet.getUserID() + ": " + originalTweet.getTweetText());
+        retweet.setTweetText(originalTweet.getUserID() + " " + originalTweet.getTweetText());
+
+        retweet.setUserID(userId);
+        retweet.setLikeCount(0);
+        retweet.setDislikeCount(0);
+        retweet.setRetweetCount(0);
+
+        statement = Datasource.getConnection().prepareStatement(INSERT_SQL);
+        statement.setInt(1, retweet.getUserID());
+        statement.setString(2, retweet.getTweetText());
+        statement.setInt(3, retweet.getLikeCount());
+        statement.setInt(4, retweet.getDislikeCount());
+        statement.setInt(5, retweet.getRetweetCount());
+        statement.execute();
+        statement.close();
+
+        return retweet;
+    }
+
+    public Tweet findTweetById(int tweetId) throws SQLException {
+        var statement = Datasource.getConnection().prepareStatement(FIND_BY_TWEET_ID);
+        statement.setInt(1, tweetId);
+        ResultSet resultSet = statement.executeQuery();
+
+        try {
+            if (resultSet.next()) {
+                Tweet tweet = new Tweet();
+                tweet.setTweetID(resultSet.getInt("tweet_id"));
+                tweet.setUserID(resultSet.getInt("user_id"));
+                tweet.setTweetText(resultSet.getString("tweet_text"));
+                tweet.setLikeCount(resultSet.getInt("like_count"));
+                tweet.setDislikeCount(resultSet.getInt("dislike_count"));
+                tweet.setRetweetCount(resultSet.getInt("retweet_count"));
+
+                return tweet;
+            } else {
+                return null;
+            }
+        } finally {
+            resultSet.close();
+            statement.close();
         }
     }
 
