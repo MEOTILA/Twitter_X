@@ -6,6 +6,7 @@ import org.example.exception.TwitterExceptions;
 import org.example.repository.TagRepository;
 import org.example.repository.TweetRepository;
 import org.example.repository.UserRepository;
+import org.example.repository.UserTweetInteractionsRepository;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,6 +16,7 @@ public class TweetServices {
     TweetRepository tweetRepository;
     UserRepository userRepository = new UserRepository();
     TagServices tagServices = new TagServices();
+    UserTweetInteractionsRepository userTweetInteractionsRepository = new UserTweetInteractionsRepository();
     public TweetServices() throws SQLException {
         tweetRepository = new TweetRepository();
     }
@@ -140,7 +142,7 @@ public class TweetServices {
         }
     }
 
-    public Tweet likeTweetById(int tweetId) throws SQLException {
+    /*public Tweet likeTweetById(int tweetId) throws SQLException {
         try {
             Tweet tweet = tweetRepository.findTweetById(tweetId);
             if (tweet == null) {
@@ -154,6 +156,28 @@ public class TweetServices {
             System.out.println("Failed to like tweet: " + d.getMessage());
             throw d;
         }
+    }*/
+
+    public Tweet likeTweetById(int tweetId) throws SQLException, TwitterExceptions {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        if (userTweetInteractionsRepository.userHasInteractedWithTweet(
+                userId, tweetId, "like")) {
+            throw new TwitterExceptions("You have already liked this tweet.");
+        }
+
+        Tweet tweet = tweetRepository.findTweetById(tweetId);
+        if (tweet == null) {
+            throw new TwitterExceptions("Tweet not found");
+        }
+
+        tweet.setLikeCount(tweet.getLikeCount() + 1);
+        tweetRepository.likeTweet(tweet);
+
+        userTweetInteractionsRepository.insertUserTweetInteraction(
+                userId, tweetId, "like");
+
+        return tweet;
     }
 
     public Tweet dislikeTweetById(int tweetId) throws SQLException {
@@ -170,6 +194,30 @@ public class TweetServices {
         throw d;
     }
     }
+
+    /*public Tweet dislikeTweetById(int tweetId) throws SQLException, TwitterExceptions {
+        int userId = AuthenticationServices.getLoggedInUser().getUserId();
+
+        if (userTweetInteractionsRepository.userHasInteractedWithTweet(
+                userId, tweetId, "dislike")) {
+            throw new TwitterExceptions("You have already disliked this tweet.");
+        }
+
+        Tweet tweet = tweetRepository.findTweetById(tweetId);
+        if (tweet == null) {
+            throw new TwitterExceptions("Tweet not found");
+        }
+
+        tweet.setDislikeCount(tweet.getDislikeCount() + 1);
+        tweetRepository.dislikeTweet(tweet);
+
+        userTweetInteractionsRepository.insertUserTweetInteraction(
+                userId, tweetId, "dislike");
+
+        return tweet;
+    }*/
+
+
     public Tweet retweetTweetById(int tweetId) throws SQLException {
         try {
             int userId = AuthenticationServices.getLoggedInUser().getUserId();
